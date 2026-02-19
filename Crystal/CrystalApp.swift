@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct CrystalApp: App {
+    
+    // MARK: - Properties
+    
+    @StateObject private var router = AppRouter()
+    
+    // MARK: - View
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(router)
         }
     }
 }

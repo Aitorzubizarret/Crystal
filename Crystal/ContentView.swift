@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    // MARK: - Properties
+    
+    @EnvironmentObject private var router: AppRouter
+    
+    // MARK: - View
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        switch router.currentRoute {
+        case .start:
+            let startViewModel = StartViewModel(router: router)
+            StartView(viewModel: startViewModel)
+        case .login:
+            LoginView()
+        case .main:
+            MainView()
         }
-        .padding()
     }
 }
 
