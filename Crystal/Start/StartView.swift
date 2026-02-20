@@ -26,7 +26,10 @@ struct StartView: View {
 
 #Preview {
     let router = AppRouter()
-    let viewModel = StartViewModel(router: router)
+    let photoPrism = PhotoPrismAPIClient()
+    
+    let viewModel = StartViewModel(router: router,
+                                   photoPrism: photoPrism)
     
     StartView(viewModel: viewModel)
 }

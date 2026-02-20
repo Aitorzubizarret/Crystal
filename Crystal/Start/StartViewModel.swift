@@ -9,6 +9,7 @@ import Foundation
 
 protocol StartViewModelProtocol {
     var router: AppRouter { get set }
+    var photoPrism: PhotoPrismAPIClient { get set }
     
     func isUserTokenSavedLocally() async -> Bool
     func checkUserLoggedIn() async
@@ -16,13 +17,22 @@ protocol StartViewModelProtocol {
 
 struct StartViewModel: StartViewModelProtocol {
     
+    // MARK: - Properties
+    
     var router: AppRouter
+    var photoPrism: PhotoPrismAPIClient
+    
+    // MARK: - Methods
     
     // Check if the user's token is saved locally.
     func isUserTokenSavedLocally() async -> Bool {
         try? await Task.sleep(nanoseconds: 2_000_000_000)
         
-        return false
+        if photoPrism.session {
+            return true
+        } else {
+            return false
+        }
     }
     
     // Checks whether the user has already log in or not, and navigate to the correct view (login or main).

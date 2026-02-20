@@ -13,6 +13,7 @@ struct CrystalApp: App {
     // MARK: - Properties
     
     @StateObject private var router = AppRouter()
+    @StateObject private var photoPrism = PhotoPrismAPIClient()
     
     // MARK: - View
     
@@ -20,6 +21,7 @@ struct CrystalApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(router)
+                .environmentObject(photoPrism)
         }
     }
 }
