@@ -129,6 +129,20 @@ class KeychainManager {
 
 extension KeychainManager {
     
+    /// Saves the ActiveSession in the Keychain.
+    func saveActiveSession(activeSession: PhotoPrismActiveSession) -> Bool {
+        do {
+            let activeSessionData = try JSONEncoder().encode(activeSession)
+            try KeychainManager().save(data: activeSessionData, account: .ACTIVE_SESSION)
+            
+            return true
+        } catch let error {
+            print("KeychainManager.saveActiveSession - Error \(error)")
+        }
+        
+        return false
+    }
+    
     /// Retrieves the ActiveSession if exists in the Keychain, otherwise nil.
     func retrieveActiveSession() -> PhotoPrismActiveSession? {
         if let activeSessionData = try? retrieve(account: .ACTIVE_SESSION),

@@ -106,9 +106,9 @@ extension PhotoPrismAPIClient {
     
     /// Saves the ActiveSession in Keychain.
     private func saveActiveSessionInKeychain(activeSession: PhotoPrismActiveSession) {
-        if let encoded = try? JSONEncoder().encode(activeSession) {
-            try? KeychainManager().save(data: encoded,
-                                        account: .ACTIVE_SESSION)
+        if !KeychainManager().saveActiveSession(activeSession: activeSession) {
+            print("Error saving the ActiveSession in Keychain")
+            // TODO: ¿Display an alert view?
         }
     }
     
