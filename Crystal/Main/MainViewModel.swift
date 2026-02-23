@@ -25,18 +25,14 @@ struct MainViewModel: MainViewModelProtocol {
     
     /// Logs out.
     func logOut() async {
-        print("MainViewModel.logOut")
         try? await photoPrism.deleteUserSession()
     }
     
+    /// Gets albums data.
     func getAlbums() async {
-        print("Aitor MainViewModel.getAlbums")
-        
-        if let activeSessionData = try? KeychainManager().retrieve(account: .token),
-           let activeSession = try? JSONDecoder().decode(PhotoPrismActiveSession.self, from: activeSessionData) {
-            print("Aitor MainViewModel.getAlbums - activeSession")
-            
-            try? await photoPrism.fetchAlbums(activeSession: activeSession, albumNumber: 10)
+        if let activeSession = KeychainManager().retrieveActiveSession() {
+            try? await photoPrism.fetchAlbums(activeSession: activeSession,
+                                              albumNumber: 10)
         } else {
             print("Error")
         }

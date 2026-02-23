@@ -13,8 +13,8 @@ class KeychainManager {
     
     private let SERVICE_NAME: String = "eus.aitorzubizarreta.crystal"
     
-    enum KeychainAccount: String {
-        case token = "token"
+    enum ACCOUNT_NAME: String {
+        case ACTIVE_SESSION = "activeSession"
     }
     
     enum KeychainError: Error {
@@ -27,7 +27,7 @@ class KeychainManager {
     // MARK: - Methods
     
     // Save
-    func save(data: Data, account: KeychainAccount) throws {
+    func save(data: Data, account: ACCOUNT_NAME) throws {
         // Query dictionary with required attributes.
         let query: [String: Any] = [
             /// Generic Password = token
@@ -58,7 +58,7 @@ class KeychainManager {
     }
     
     // Retrieve
-    func retrieve(account: KeychainAccount) throws -> Data? {
+    func retrieve(account: ACCOUNT_NAME) throws -> Data? {
         // Query dictionary with required attributes.
         let query: [String: Any] = [
             /// Generic Password = token
@@ -98,7 +98,7 @@ class KeychainManager {
     // Update
     
     // Delete
-    func delete(account: KeychainAccount) throws {
+    func delete(account: ACCOUNT_NAME) throws {
         // Query dictionary with required attributes.
         let query: [String: Any] = [
             /// Generic Password = token
@@ -120,6 +120,22 @@ class KeychainManager {
             return
         default:
             throw KeychainError.unexpectedStatus(status)
+        }
+    }
+    
+}
+
+// MARK: - ActiveSession
+
+extension KeychainManager {
+    
+    /// Retrieves the ActiveSession if exists in the Keychain, otherwise nil.
+    func retrieveActiveSession() -> PhotoPrismActiveSession? {
+        if let activeSessionData = try? retrieve(account: .ACTIVE_SESSION),
+           let activeSession = try? JSONDecoder().decode(PhotoPrismActiveSession.self, from: activeSessionData) {
+            return activeSession
+        } else {
+            return nil
         }
     }
     

@@ -28,8 +28,7 @@ struct StartViewModel: StartViewModelProtocol {
     func isUserSessionSavedLocally() async -> Bool {
         try? await Task.sleep(nanoseconds: 500_000_000) // 0,5 seconds
         
-        if let activeSessionData = try? KeychainManager().retrieve(account: .token),
-           let activeSession = try? JSONDecoder().decode(PhotoPrismActiveSession.self, from: activeSessionData) {
+        if let activeSession = KeychainManager().retrieveActiveSession() {
             photoPrism.activeSession = activeSession
             
             return true

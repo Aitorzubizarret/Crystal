@@ -108,13 +108,13 @@ extension PhotoPrismAPIClient {
     private func saveActiveSessionInKeychain(activeSession: PhotoPrismActiveSession) {
         if let encoded = try? JSONEncoder().encode(activeSession) {
             try? KeychainManager().save(data: encoded,
-                                        account: .token)
+                                        account: .ACTIVE_SESSION)
         }
     }
     
     /// Deletes the ActiveSession in Keychain.
     private func deleteActiveSessionInKeychain(activeSession: PhotoPrismActiveSession) {
-        try? KeychainManager().delete(account: .token)
+        try? KeychainManager().delete(account: .ACTIVE_SESSION)
     }
     
 }
