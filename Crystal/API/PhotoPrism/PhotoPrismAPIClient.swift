@@ -114,7 +114,10 @@ extension PhotoPrismAPIClient {
     
     /// Deletes the ActiveSession in Keychain.
     private func deleteActiveSessionInKeychain(activeSession: PhotoPrismActiveSession) {
-        try? KeychainManager().delete(account: .ACTIVE_SESSION)
+        if !KeychainManager().deleteActiveSession() {
+            print("Error deleting the ActiveSession from the Keychain")
+            // TODO: ¿Display an alert view?
+        }
     }
     
 }

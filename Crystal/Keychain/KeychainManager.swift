@@ -153,4 +153,17 @@ extension KeychainManager {
         }
     }
     
+    /// Deletes the ActiveSession from the Keychain.
+    func deleteActiveSession() -> Bool {
+        do {
+            try delete(account: .ACTIVE_SESSION)
+            
+            return true
+        } catch let error {
+            print("KeychainManager.deleteActiveSession - Error \(error)")
+        }
+        
+        return false
+    }
+    
 }
