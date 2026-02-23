@@ -17,9 +17,9 @@ struct StartView: View {
     
     var body: some View {
         ProgressView()
-        Text("Checking if there is a user logged in ...")
+        Text("Checking user session ...")
         .task {
-            await viewModel.checkUserLoggedIn()
+            await viewModel.checkUserSession()
         }
     }
 }

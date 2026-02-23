@@ -26,13 +26,20 @@ struct ContentView: View {
             let loginViewModel = LoginViewModel(router: router,
                                                 photoPrism: photoPrism)
             LoginView(viewModel: loginViewModel)
-            .onChange(of: photoPrism.session) { oldValue, newValue in
-                if newValue {
-                    router.navigate(to: .main)
+                .onChange(of: photoPrism.activeSession) { oldValue, newValue in
+                    if let _ = newValue {
+                        router.navigate(to: .main)
+                    }
                 }
-            }
         case .main:
-            MainView()
+            let mainViewModel = MainViewModel(router: router,
+                                              photoPrism: photoPrism)
+            MainView(viewModel: mainViewModel)
+                .onChange(of: photoPrism.activeSession) { oldValue, newValue in
+                    if newValue == nil {
+                        router.navigate(to: .login)
+                    }
+                }
         }
     }
 }

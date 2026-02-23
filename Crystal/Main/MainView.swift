@@ -8,11 +8,36 @@
 import SwiftUI
 
 struct MainView: View {
+    
+    // MARK: - Properties
+    
+    var viewModel: MainViewModel
+    
+    // MARK: - View
+    
     var body: some View {
-        Text("Main View")
+        VStack {
+            Text("Main View")
+            Button {
+                Task {
+                    await viewModel.logOut()
+                }
+            } label: {
+                Text("Log out")
+            }
+        }
+        .task {
+            await viewModel.getAlbums()
+        }
     }
 }
 
 #Preview {
-    MainView()
+    let router = AppRouter()
+    let photoPrism = PhotoPrismAPIClient()
+    
+    let viewModel = MainViewModel(router: router,
+                                  photoPrism: photoPrism)
+    
+    MainView(viewModel: viewModel)
 }

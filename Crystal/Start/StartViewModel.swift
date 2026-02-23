@@ -11,8 +11,8 @@ protocol StartViewModelProtocol {
     var router: AppRouter { get set }
     var photoPrism: PhotoPrismAPIClient { get set }
     
-    func isUserTokenSavedLocally() async -> Bool
-    func checkUserLoggedIn() async
+    func isUserSessionSavedLocally() async -> Bool
+    func checkUserSession() async
 }
 
 struct StartViewModel: StartViewModelProtocol {
@@ -24,22 +24,25 @@ struct StartViewModel: StartViewModelProtocol {
     
     // MARK: - Methods
     
-    // Check if the user's token is saved locally.
-    func isUserTokenSavedLocally() async -> Bool {
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
+    // Check if the user's session is saved locally.
+    func isUserSessionSavedLocally() async -> Bool {
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0,5 seconds
         
-        if photoPrism.session {
+        if let activeSessionData = try? KeychainManager().retrieve(account: .token),
+           let activeSession = try? JSONDecoder().decode(PhotoPrismActiveSession.self, from: activeSessionData) {
+            photoPrism.activeSession = activeSession
+            
             return true
         } else {
             return false
         }
     }
     
-    // Checks whether the user has already log in or not, and navigate to the correct view (login or main).
-    func checkUserLoggedIn() async {
-        let isUserLoggedIn: Bool = await isUserTokenSavedLocally()
+    // Checks whether the user's session exists or not, and navigates to the correct view (login or main).
+    func checkUserSession() async {
+        let isUserSessionSaved: Bool = await isUserSessionSavedLocally()
         
-        if isUserLoggedIn {
+        if isUserSessionSaved {
             router.navigate(to: .main)
         } else {
             router.navigate(to: .login)
